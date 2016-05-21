@@ -9,7 +9,7 @@ class BrailleTranslatorTest < Minitest::Test
   end
 
   def test_input_into_translator
-    skip
+    # skip
     braille = BrailleTranslator.new(input)
     assert_equal
   end
