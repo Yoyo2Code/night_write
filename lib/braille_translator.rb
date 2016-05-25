@@ -1,42 +1,97 @@
+require './lib/dictionary'
+require 'pry'
+
 class BrailleTranslator
+  attr_reader :characters,
+              :inputting_numbers,
+              :braille
+
+  include Dictionary
 
   def initialize(characters)
     @characters = characters
+    @braille = []
+    @inputting_numbers = false
   end
 
-  def translate_to_braille
-    braille_key = { "a" => [["0."],[".."],[".."]], "b" => ["0.","0.",".."], "c" => ["00","..",".."],
-      "d" => [["00"],[".0"],[".."]], "e" => [["0."],[".0"],[".."]], "f" => [["00"],["0."],[".."]],
-      "g" => [["00"],["00"],[".."]], "h" => [["0."],["00"],[".."]], "i" => [[".0"],["0."],[".."]],
-      "j" => [["0."],["00"],[".."]], "k" => [["0."],[".."],["0."]], "l" => [["0."],["0."],["0."]],
-      "m" => [["00"],[".."],["0."]], "n" => [["00"],["0."],[".0"]], "o" => [["0."],[".0"],["0."]],
-      "p" => [["00"],["0."],["0."]], "q" => [["00"],["00"],["0."]], "r" => [["0."],["00"],["0."]],
-      "s" => [[".0"],["0."],["0."]], "t" => [[".0"],["00"],["0."]], "u" => [["0."],[".."],["00"]],
-      "v" => [["0."],["0."],["00"]], "w" => [[".0"],["00"],["0."]], "x" => [["00"],[".."],["00"]],
-      "y" => [["00"],[".0"],["00"]], "z" => [["0."],[".0"],["00"]],"!" => [[".."],["00"],["0."]],
-      "'" => [[".."],[".."],["0."]], "," => [[".."],["0."],[".."]], "-" => [[".."],[".."],["00"]],
-      "." => [[".."],["00"],[".0"]], "?" => [[".."],["0."],["00"]], /[A-Z]/.to_s => [[".."],[".."],[".0"]],
-      "#" => [[".0"],[".0"],["00"]], "0" => [[".0"],["00"],[".."]], "1" => [["0."],[".."],[".."]],
-      "2" => [["0."],["0."],[".."]], "3" => [["00"],[".."],[".."]], "4" => [["00"],[".0"],[".."]],
-      "5" => [["0."],[".0"],[".."]], "6" => [["00"],["0."],[".."]], "7" => [["00"],["00"],[".."]],
-      "8" => [["0."],["00"],[".."]], "9" => [[".0"],["0."],[".."]] }
-
-      caps =~ /[A-Z]/
-      @characters.map do |plain|
-        if plain == caps
-          require'pry'; binding.pry
-          braille_key[plain]; braille_key[plain.downcase]
-        else
-          braille_key[plain]
-        end
+  def english_to_braille
+    @characters.each do |plain|
+      if capital_letter?(plain)
+        insert_capital(plain)
+      elsif start_numbers?(plain)
+        start_numbers(plain)
+      elsif input_more_numbers?(plain)
+        translate_character(plain)
+      elsif stop_number_input(plain)
+        stop_numbers(plain)
+      elsif inputting_numbers == false
+        translate_character(plain)
       end
+    end
+    braille
+  end
+
+  def capital_letter?(input)
+    input =~ /[A-Z]/ && inputting_numbers == false ? true : false
+  end
+
+  def start_numbers?(input)
+    input =~ /[0-9]/ && inputting_numbers == false ? true : false
+  end
+
+  def input_more_numbers?(input)
+    input =~ /[0-9]/ && inputting_numbers == true ? true : false
+  end
+
+  def start_numbers(input)
+    putting_numbers
+    start_number_insert(input)
+  end
+
+  def stop_number_input(input)
+    if input !~ /[0-9]/ && inputting_numbers == true
+      true
     end
   end
 
-# I have an array of characters ["A"]
-# if it is capitalized
-# run it through the braille
+  def stop_numbers(input)
+    not_putting_in_numbers
+    after_numbers(input)
+  end
+
+  def putting_numbers
+    @inputting_numbers = true
+  end
+
+  def not_putting_in_numbers
+    @inputting_numbers = false
+  end
+
+  def after_numbers(letter)
+    if letter =~ /[A-Z]/ && inputting_numbers == false
+      braille << translate_to_braille("shift")
+      braille << translate_to_braille(letter.downcase)
+    else
+      braille << translate_to_braille(letter)
+    end
+  end
+
+  def insert_capital(letter)
+    braille << translate_to_braille("shift")
+    braille << translate_to_braille(letter.downcase)
+  end
+
+  def start_number_insert(number)
+    braille << translate_to_braille("#")
+    braille << translate_to_braille(number)
+  end
+
+  def translate_character(character)
+    braille << translate_to_braille(character)
+  end
+end
+
 if __FILE__ == $0
-  braille = BrailleTranslator.new(["h","e","L"])
-  p braille.translate_to_braille
+  braille = BrailleTranslator.new(["H","8","l"])
+  p braille.english_to_braille
 end
