@@ -21,7 +21,7 @@ require './lib/exporter'
       characters = words.translate_to_english(words.plain)
 
       # translator = EnglishTranslator.new(characters)
-      # braille = translator.english_to_braille
+      # braille = translator.translate_to_english(translator.characters)
 
       formatter = EnglishFormatter.new(characters)
       english_output = formatter.lines_of_80(formatter.english)

@@ -52,12 +52,18 @@ class CharacterSeperator
     end
   end
 
-  def make_words(braille)
-    line = seperate_words(braille)
-    line.map do |one|
-      one.transpose
+  # def self.make_words(braille)
+  #   line = seperate_words(braille)
+  #   line.map do |one|
+  #     one.transpose
+  #   end
+
+    def make_words(braille)
+      line = seperate_words(braille)
+      line.map do |one|
+        one.transpose
+      end
     end
-  end
 
   def translate_to_english(english_word)
     capital = false
@@ -89,5 +95,5 @@ if __FILE__ == $0
   character_seperator = CharacterSeperator.new("..0..0......0.0..0....0.0.0...000...0...\n..000.0.....00.000......00.0...0.0....0.\n.0.........0..0.0....0..0.....000..00000")
 
   character_seperator.seperate_words(character_seperator.plain)
-  binding.pry
+  # binding.pry
 end
