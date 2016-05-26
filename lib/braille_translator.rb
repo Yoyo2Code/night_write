@@ -1,11 +1,4 @@
-require './lib/braille_formatter'
-require './lib/braille_translator'
-require './lib//character_seperator'
 require './lib/dictionary'
-require './lib/english_formatter'
-require './lib/english_translator'
-require './lib/exporter'
-require './lib/reader'
 require 'pry'
 
 class BrailleTranslator
@@ -102,8 +95,8 @@ class BrailleTranslator
   end
 end
 
-
 if __FILE__ == $0
   braille = BrailleTranslator.new(["H","8","l"])
-  p braille.english_to_braille
+  braille.english_to_braille
+  binding.pry
 end

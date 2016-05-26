@@ -1,11 +1,3 @@
-require './lib/braille_formatter'
-require './lib/braille_translator'
-require './lib//character_seperator'
-require './lib/dictionary'
-require './lib/english_formatter'
-require './lib/english_translator'
-require './lib/exporter'
-require './lib/reader'
 require 'pry'
 
 class Formatter
@@ -37,10 +29,7 @@ class Formatter
   end
 
   def split_characters_by_160(braille)
-      if braille.length > 161
-        braille << braille.slice!(160..-1)
-      else
-        braille.join("\n")
+      braille.length > 161 ? braille << braille.slice!(160..-1) : braille.join("\n")
       end
   end
 end
