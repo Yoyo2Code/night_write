@@ -29,6 +29,7 @@ class NightWriter
     braille_output = formatter.braille_lines(braille)
 
     exporter = Exporter.new(braille_output)
+    # binding.pry
     exporter.export
   end
 end

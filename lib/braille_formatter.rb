@@ -25,12 +25,12 @@ class Formatter
       line_3.concat(character[2])
     end
     results << line_1 << line_2 << line_3
-    results
+    return results
   end
 
   def split_characters_by_160(braille)
     braille.each do |line|
-      if line.length > 160
+      if line.length > 161
         braille << line.slice!(160..-1)
       end
     end

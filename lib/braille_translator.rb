@@ -82,14 +82,15 @@ class BrailleTranslator
   end
 
   def start_number_insert(number)
-    braille << translate_to_braille("#")
-    braille << translate_to_braille(number)
+    braille << translate_numbers("#")
+    braille << translate_numbers(number)
   end
 
   def translate_character(character)
     braille << translate_to_braille(character)
   end
 end
+
 
 if __FILE__ == $0
   braille = BrailleTranslator.new(["H","8","l"])
