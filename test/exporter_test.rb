@@ -4,10 +4,8 @@ require './lib/exporter'
 
 class ReaderTest < Minitest::Test
 
-  def test_argv_input
-
+  def test_exporter_input
+    exporter = Exporter.new("message.txt")
+    assert_equal "message.txt", exporter.text
   end
-
-  def test_reader_reads_files
-
 end

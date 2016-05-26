@@ -1,4 +1,11 @@
+require './lib/braille_formatter'
+require './lib/braille_translator'
+require './lib//character_seperator'
 require './lib/dictionary'
+require './lib/english_formatter'
+require './lib/english_translator'
+require './lib/exporter'
+require './lib/reader'
 require 'pry'
 
 class CharacterSeperator
@@ -34,6 +41,16 @@ class CharacterSeperator
       words = []
       line.map do |second_line|
         words << second_line.slice!(0..1)
+      end
+    end
+  end
+
+  def make_words(braille)
+    lines = seperate_words(braille)
+    lines.map do |line|
+      line.map do |word|
+        braille_characters = check_for_special(word)
+        translate_to_english(braille_characters)
       end
     end
   end

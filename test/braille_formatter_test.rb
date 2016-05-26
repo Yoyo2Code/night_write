@@ -4,10 +4,11 @@ require './lib/braille_formatter'
 require 'pry'
 
 class FormatterTest < Minitest::Test
-  attr_reader :braille
+  attr_reader :long_braille
 
   def setup
-    @braille = [["..","0.",".."],["0.",".0","00"],
+    @number_braille =
+    @long_braille = [["..","0.",".."],["0.",".0","00"],
                 ["..","0.",".."],["0.",".0","00"],
                 ["..","0.",".."],["0.",".0","00"],
                 ["..","0.",".."],["0.",".0","00"],
@@ -93,12 +94,39 @@ class FormatterTest < Minitest::Test
               ]
   end
 
-  def test_does_not_
-     formatter = Formatter.new(braille)
-    #  binding.pry
-     result = formatter.braille_lines(braille)
+  def test_accepts_braille
+    pound_sign = [".0",".0","00"]
+    formatter = Formatter.new(pound_sign)
+    assert_equal [".0",".0","00"], formatter.braille
+  end
 
-string = "..0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0.
+  def test_accepts_more_than_one_character
+    pound_sign = [".0",".0","00"], [".0",".0","00"]
+    formatter = Formatter.new(pound_sign)
+    assert_equal [".0",".0","00"], [".0",".0","00"], formatter.braille
+  end
+
+  def test_making_three_lines
+    pound_sign = [".0",".0","00"], [".0",".0","00"], [".0",".0","00"]
+    formatter = Formatter.new(pound_sign)
+    assert_equal [".0.0.0", ".0.0.0", "000000"], formatter.make_three_lines(formatter.braille)
+  end
+
+  def test_split_characters_by_160_works_with_one_word
+    pound_sign = [".0",".0","00"], [".0",".0","00"]
+    formatter = Formatter.new(pound_sign)
+    assert_equal [".0",".0","00"], [".0",".0","00"], formatter.split_characters_by_160(formatter.braille)
+  end
+
+  def test_making_braille_lines
+    pound_sign = [".0",".0","00"], [".0",".0","00"]
+    formatter = Formatter.new(pound_sign)
+    assert_equal ".0.0\n.0.0\n0000", formatter.braille_lines(formatter.braille)
+  end
+
+  def test_splits_at_160_characters
+    formatter = Formatter.new(long_braille)
+    result = "..0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0.
 0..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..0
 ..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00..00
 ..0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0.
@@ -107,7 +135,7 @@ string = "..0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...0...
 ..0...0...0.
 0..00..00..0
 ..00..00..00"
-binding.pry
-assert_equal string, result
+
+    assert_equal result, formatter.braille_lines(formatter.braille)
   end
 end
