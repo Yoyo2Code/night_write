@@ -32,7 +32,6 @@ class Formatter
       braille.length > 161 ? braille << braille.slice!(160..-1) : braille.join("\n")
       end
   end
-end
 
 if __FILE__ == $0
   formatter = Formatter.new([["..", "..", ".0"], ["0.", "00", ".."], [".0", ".0", "00"], ["0.", "00", ".."], ["0.", "0.", "0."]])
