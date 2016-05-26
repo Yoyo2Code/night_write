@@ -9,54 +9,30 @@ require './lib/reader'
 require 'pry'
 
 class EnglishFormatter
-  attr_accessor :capital,
-                :number,
-                :characters
+  attr_accessor :english,
+                :length
 
   include Dictionary
 
-  def initialize(characters)
-    @capital = false
-    @number = false
-    @characters = characters
+  def initialize(english)
+    @english = english
   end
 
-  def check_for_special(input)
-    if input == [".0",".0","00"]
-      translate_to_braille(input)
-    elsif input == ["..","..",".0"]
-      translate_numbers(input)
+  def count(english)
+    english.count
+  end
+
+  def lines_of_80(english)
+    sentence = english.flatten.join
+    sentence.length > 80 ? sentence.scan((/.{1,#{80}}/)).join("\n") : sentence
     end
   end
 
-  def translate_to_english(english_word)
-    if english_word == "shift"
-      capital = true
-    elsif capital == true
-      capital = false
-      translate_to_braille(english_word)
-    elsif english_word == "#"
-      number = true
-    elsif number == true
-      translate_numbers(english_word)
-    else
-      translate_to_braille(english_word)
-    end
-  end
 
-  def make_words(braille)
-    lines = seperate_words(braille)
-    lines.map do |line|
-      line.map do |word|
-        braille_characters = check_for_special(word)
-        translate_to_english(braille_characters)
-      end
-    end
-  end
-end
+
 
 if __FILE__ == $0
-  word = [["00","0.","0."], ["00","0.","0."], ["00","0.","0."]]
+  word = ["H", "i", ",", " ", "H", "o", "w", " ", "A", "r", "e", " ", "y", "o", "U", "?"]
   formatter = EnglishFormatter.new(word)
   binding.pry
 end

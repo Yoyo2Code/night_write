@@ -28,7 +28,7 @@ class BrailleTranslator
       elsif start_numbers?(plain)
         start_numbers(plain)
       elsif input_more_numbers?(plain)
-        translate_character(plain)
+        translate_number(plain)
       elsif stop_number_input(plain)
         stop_numbers(plain)
       elsif inputting_numbers == false
@@ -76,25 +76,29 @@ class BrailleTranslator
 
   def after_numbers(letter)
     if letter =~ /[A-Z]/ && inputting_numbers == false
-      braille << translate_to_braille("shift")
-      braille << translate_to_braille(letter.downcase)
+      braille << DICTIONARY["shift"]
+      braille << DICTIONARY[letter.downcase]
     else
-      braille << translate_to_braille(letter)
+      braille << DICTIONARY[letter]
     end
   end
 
   def insert_capital(letter)
-    braille << translate_to_braille("shift")
-    braille << translate_to_braille(letter.downcase)
+    braille << DICTIONARY["shift"]
+    braille << DICTIONARY[letter.downcase]
   end
 
   def start_number_insert(number)
-    braille << translate_numbers("#")
-    braille << translate_numbers(number)
+    braille << NUMBERS["#"]
+    braille << NUMBERS[number]
   end
 
   def translate_character(character)
-    braille << translate_to_braille(character)
+    braille << DICTIONARY[character]
+  end
+
+  def translate_number(character)
+    braille << NUMBERS[character]
   end
 end
 

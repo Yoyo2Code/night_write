@@ -6,12 +6,33 @@ require './lib/english_formatter'
 require './lib/exporter'
 
 
-class NightReader
-  attr_reader :input_file
+  class NightReader
+    attr_reader :reader,
+                :input_file
 
-  def initialize
-    @input_file = ARGV[0]
+    def initialize
+      @input_file = ARGV[0]
+    end
+
+    def translate
+      reader = Reader.new(input_file)
+
+      words = CharacterSeperator.new(reader.read)
+      characters = words.translate_to_english(words.plain)
+
+      # translator = EnglishTranslator.new(characters)
+      # braille = translator.english_to_braille
+
+      formatter = EnglishFormatter.new(characters)
+      english_output = formatter.lines_of_80(formatter.english)
+
+      exporter = Exporter.new(english_output)
+      # binding.pry
+      exporter.export
+    end
   end
 
-
-end
+  if __FILE__ == $0
+    writer = NightReader.new
+    writer.translate
+  end
