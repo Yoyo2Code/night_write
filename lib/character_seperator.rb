@@ -12,16 +12,16 @@ class CharacterSeperator
   attr_reader :plain,
               :new_english_words,
               :braille_dictionary,
-              :number_dictionary,
-              :capital,
-              :number
+              :number_dictionary
+              # :capital,
+              # :number
 
   include Dictionary
 
   def initialize(plain)
     @plain = plain
-    @capital = false
-    @number = false
+    # @capital = false
+    # @number = false
     @braille_dictionary = DICTIONARY.invert
     @number_dictionary = NUMBERS.invert
   end
@@ -78,7 +78,7 @@ class CharacterSeperator
           capital = false
           letter = braille_dictionary[word]
           letter.capitalize
-        elsif english_word == [".0",".0","00"]
+        elsif word == [".0",".0","00"]
           number = true
         elsif number == true
           number_dictionary[word]
@@ -92,8 +92,8 @@ end
 
 
 if __FILE__ == $0
-  character_seperator = CharacterSeperator.new("..0..0......0.0..0....0.0.0...000...0...\n..000.0.....00.000......00.0...0.0....0.\n.0.........0..0.0....0..0.....000..00000")
+  character_seperator = CharacterSeperator.new("..00.0.0..00.0.0000...0\n0000...0.0..0....0..00\n0.0.00..00.........00.")
 
   character_seperator.seperate_words(character_seperator.plain)
-  # binding.pry
+  binding.pry
 end
