@@ -13,15 +13,11 @@ class CharacterSeperator
               :new_english_words,
               :braille_dictionary,
               :number_dictionary
-              # :capital,
-              # :number
 
   include Dictionary
 
   def initialize(plain)
     @plain = plain
-    # @capital = false
-    # @number = false
     @braille_dictionary = DICTIONARY.invert
     @number_dictionary = NUMBERS.invert
   end
@@ -52,12 +48,6 @@ class CharacterSeperator
     end
   end
 
-  # def self.make_words(braille)
-  #   line = seperate_words(braille)
-  #   line.map do |one|
-  #     one.transpose
-  #   end
-
     def make_words(braille)
       line = seperate_words(braille)
       line.map do |one|
@@ -80,6 +70,7 @@ class CharacterSeperator
           letter.capitalize
         elsif word == [".0",".0","00"]
           number = true
+          nil
         elsif number == true
           number_dictionary[word]
         else

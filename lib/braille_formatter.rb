@@ -33,15 +33,20 @@ class Formatter
       line_3.concat(character[2])
     end
     results << line_1 << line_2 << line_3
-    return results
+    results.join("\n")
   end
 
   def split_characters_by_160(braille)
-    braille.each do |line|
-      if line.length > 161
-        braille << line.slice!(160..-1)
+      if braille.length > 161
+        braille << braille.slice!(160..-1)
+      else
+        braille.join("\n")
       end
-    end
-    braille.join("\n")
   end
+end
+
+if __FILE__ == $0
+  formatter = Formatter.new([["..", "..", ".0"], ["0.", "00", ".."], [".0", ".0", "00"], ["0.", "00", ".."], ["0.", "0.", "0."]])
+  formatter.make_three_lines(formatter.braille)
+  binding.pry
 end
